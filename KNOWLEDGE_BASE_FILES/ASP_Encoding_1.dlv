@@ -1,0 +1,6 @@
+
+% Make lines symmetric
+line(Y,X) :- line(X,Y), X != Y.
+
+% Transitive closure: if line(X,Z) and line(Z,Y), then line(X,Y)
+line(X,Y) :- line(X,Z), line(Z,Y), X != Y.

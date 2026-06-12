@@ -1,0 +1,360 @@
+preprocessing:
+- _: |
+
+
+strings:
+- labyrinth_description: |
+    There is an initial cell and a goal cell.
+    Cells are connected by adjacency relations.
+    Rows and columns can be shifted, modifying the connections.
+    The number of steps is bounded.
+
+- nomystery_description: |
+    Locations are connected by weighted edges.
+    Being at a location and having a fuel amount are state properties.
+    Traversing an edge consumes fuel according to its cost.
+    All goal locations must be reached within the available fuel.
+
+- ricochetrobots_description: |
+    A grid has a fixed dimension.
+    Robots occupy grid cells.
+    Barriers block movement between cells.
+    Movement in a direction continues until a barrier or robot is encountered.
+    A target cell must be reached in a fixed number of moves.
+
+- sokoban_description: |
+    A warehouse grid contains a player and stones occupying floor cells.
+    Movement is directional across adjacent locations.
+    A stone can be pushed only if the next cell is clear.
+    Goal stones must eventually be placed on designated storage (goal) cells.
+
+
+extract:
+- problem_name(problem):
+    types: [symbol]
+    prompt: |
+        Tell me the name of the problem that best match the text in INPUT.
+        Choose from the following options: [labyrinth, nomystery, ricochetrobots, sokoban]
+        
+        Here is a description of each problem:
+        labyrinth:
+        There is an initial cell and a goal cell.
+        Cells are connected by adjacency relations.
+        Rows and columns can be shifted, modifying the connections.
+        The number of steps is bounded.
+        Predicates: field/2, init_on/2, goal_on/2, connect/3, max_steps/1
+        
+        nomystery:
+        Locations are connected by weighted edges.
+        Being at a location and having a fuel amount are state properties.
+        Traversing an edge consumes fuel according to its cost.
+        All goal locations must be reached within the available fuel.
+        Predicates: fuelcost/3, at/2, fuel/2, goal/2, step/1
+        
+        ricochetrobots:
+        A grid has a fixed dimension.
+        Robots occupy grid cells.
+        Barriers block movement between cells.
+        Movement in a direction continues until a barrier or robot is encountered.
+        A target cell must be reached in a fixed number of moves.
+        Predicates: dim/1, pos/3, barrier/3, target/3, length/1
+        
+        sokoban:
+        A warehouse grid contains a player and stones occupying floor cells.
+        Movement is directional across adjacent locations.
+        A stone can be pushed only if the next cell is clear.
+        Goal stones must eventually be placed on designated storage (goal) cells.
+        Predicates: at/2, clear/2, isgoal/1, isnongoal/1, goal/1, player/1, steps/1, movedir/3
+
+- size(value): 
+    types: [int]
+
+    prompt: | 
+        {labyrinth_description} 
+        
+        value is the size of the quadratic grid of fields (an integer).
+        
+    kb: |
+        field(X,Y) :- size(N), X = 1..N, Y = 1..N.
+        #show field/2.
+
+    if: problem_name(labyrinth)
+
+
+- init_on(x, y): 
+    types: [int, int]
+
+    prompt: | 
+        {labyrinth_description} 
+        
+        Specify the starting position field by giving its coordinates (x,y). Coordinates are integers.  
+
+    if: problem_name(labyrinth)
+
+
+- goal_on(x, y): 
+    types: [int, int]
+
+    prompt: | 
+        {labyrinth_description} 
+        
+        Specify the goal position field by giving its coordinates (x,y). Coordinates are integers.
+
+    if: problem_name(labyrinth)
+
+
+- connect(x, y, direction): 
+    types: [int, int, symbol]
+
+    prompt: | 
+        {labyrinth_description} 
+        
+        List all the connections of fields. Coordinates (x, y) are integers. direction is one of the following unquoted strings n, s, e, w.
+
+    if: problem_name(labyrinth)
+
+
+- max_steps(value): 
+    types: [int]
+
+    prompt: | 
+        {labyrinth_description} 
+        
+        value is the maximum number of pushes or steps (an integer).
+
+    if: problem_name(labyrinth)
+
+
+
+
+
+- at(object, location): 
+    types: [symbol, symbol]
+    prompt: |
+        {nomystery_description} 
+        
+        For each object (an unquoted string), specify its initial location (an unquoted string).
+
+    if: problem_name(nomystery)
+
+
+- fuel(truck, quantity): 
+    types: [symbol, int]
+    prompt: |
+        {nomystery_description} 
+        
+        For each truck (an unquoted string), specify the initial quantity of fuel (an integer).
+    
+    if: problem_name(nomystery)
+
+
+- fuelcost(cost, source, target): 
+    types: [int, symbol, symbol]
+    prompt: |
+        {nomystery_description} 
+        
+        For each source location connected to a target location, specify the cost (an integer) to travel between them. Locations are unquoted strings.
+
+    if: problem_name(nomystery)
+
+
+- goal(package, location):
+    types: [symbol, symbol]
+    prompt: |
+        {nomystery_description} 
+        
+        For each package (an unquoted string), specify the location (an unquoted string) where it must stay at the final step.
+
+    if: problem_name(nomystery)
+
+
+- steps(value): 
+    types: [int]
+    prompt: |
+        {nomystery_description} 
+        
+        value is the number of steps (an integer).
+
+    kb: |
+        step(1..N) :- steps(N).
+        #show step/1.
+
+    if: problem_name(nomystery)
+
+
+
+
+
+- dim(value):
+    types: [int]
+    prompt: |
+        {ricochetrobots_description} 
+        
+        value is the size (dimension) of the square board.
+
+    kb: |
+        dim(I-1) :- dim(I), I > 1.
+        #show dim/1.
+
+    if: problem_name(ricochetrobots)
+
+
+- pos(robot, x, y):
+    types: [symbol, int, int]
+    prompt: |
+        {ricochetrobots_description} 
+        
+        For each robot, provide the starting position or location (x, y).
+        robot is an unquoted string.
+        Coordinates (x, y) are integers.
+
+    if: problem_name(ricochetrobots)
+
+
+- barrier(source_x, source_y, target_x, target_y, direction):
+    types: [int, int, int, int, symbol] 
+    prompt: |
+        {ricochetrobots_description} 
+        
+        List all the barriers between cells (source_x, source_y) and (target_x, target_y) towards a given direction.
+        source_x, source_y, target_x, target_y are integers.
+        direction is one of the following unquoted strings north, sud, east, west.
+
+    kb: |
+        barrier(X,Y,X',Y',Dir) :- barrier(X',Y',X,Y,Dir).
+
+        barrier(X,Y,Dir) :- barrier(X,Y,X',Y',Dir), Dir == west,  (X',Y') == (X-1,Y).
+        barrier(X,Y,Dir) :- barrier(X,Y,X',Y',Dir), Dir == east,  (X',Y') == (X+1,Y).
+        barrier(X,Y,Dir) :- barrier(X,Y,X',Y',Dir), Dir == north, (X',Y') == (X,Y-1).
+        barrier(X,Y,Dir) :- barrier(X,Y,X',Y',Dir), Dir == south, (X',Y') == (X,Y+1).
+        
+        #show barrier/3.
+
+    if: problem_name(ricochetrobots)
+
+
+- target(robot, x, y):
+    types: [symbol, int, int]
+    prompt: |
+        {ricochetrobots_description} 
+        
+        Specify the position (x, y) that the robot must reach. Coordinates (x, y) are integers.
+
+    if: problem_name(ricochetrobots)
+
+
+- length(value): 
+    types: [int]
+    prompt: |
+        {ricochetrobots_description} 
+        
+        value is the number of moves in the plan.
+
+    if: problem_name(ricochetrobots)
+
+
+
+
+
+- at(object, position):      
+    types: [symbol, symbol]    
+    prompt: |
+        {sokoban_description} 
+        
+        For each object (either the sokoban or a stone), provide its initial position (an unquoted string).
+
+    if: problem_name(sokoban)
+
+        
+- clear(location):
+    types: [symbol]
+    prompt: |
+        {sokoban_description} 
+        
+        List every location (an unquoted string) that is free of object (clear).
+
+    if: problem_name(sokoban)
+
+
+- isgoal(location): 
+    types: [symbol]
+    prompt: |
+        {sokoban_description} 
+        
+        List every location (an unquoted string) that is a goal, i.e., that must hold a stone at the end.
+
+    if: problem_name(sokoban)
+
+
+- isnongoal(location): 
+    types: [symbol]
+    prompt: |
+        {sokoban_description} 
+        
+        List all locations (unquoted string) that are not a goal location.
+
+    if: problem_name(sokoban)
+
+
+- goal(stone): 
+    types: [symbol]
+    prompt: |
+        {sokoban_description} 
+        
+        List every stone (an unquoted string) that is a goal, i.e., a stone that must reach a goal location.
+
+    if: problem_name(sokoban)
+
+
+- player(id): 
+    types: [symbol]
+    prompt: |
+        {sokoban_description} 
+        
+        Specify the sokoban player id (an unquoted string).
+
+    if: problem_name(sokoban)
+
+
+- steps(value): 
+    types: [int]
+    prompt: |
+        {sokoban_description} 
+        
+        value is the number of steps (an integer).
+
+    kb: |
+        step(I) :- steps(N), I = 1..N.
+        #show step/1.
+
+    if: problem_name(sokoban)
+
+
+- movedir(source, target, direction): 
+    types: [symbol, symbol, symbol]
+    prompt: |
+        {sokoban_description} 
+        
+        List all possible movements from location source (an unquoted string) to location target (an unquoted string) towards a given direction.
+        Direction is an unquoted string among dir_up, dir_down, dir_left, dir_right.
+
+    if: problem_name(sokoban)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

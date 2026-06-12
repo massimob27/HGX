@@ -1,0 +1,10 @@
+% candidate priority loads
+p_load(X,Y) :- priority(X), load(X,Y).
+
+% X is worse if another priority element has a larger load
+worse(X) :- p_load(X,Y), p_load(X2,Y2), Y2 > Y.
+
+% the ones not worse have maximal load
+most_priority(X) :- p_load(X,_), not worse(X).
+
+#show most_priority/1.

@@ -1,0 +1,167 @@
+[
+    {
+    "problem_name": 3,
+    "text": "Substation s1 is a priority node with load 40, and substation s2 has load 30. s1 is connected to s2 by a line with capacity 60. Generator g1 also exists. The line from s2 to s3 is faulty. Check whether s1 and s2 are overloaded. the link between s2 and s3 should become deactivated.",
+    "output": "substation(s1). substation(s2). substation(s3). generator(g1). line(s1,s2). line(s2,s1). line(s2,s3). line(s3,s2). line(s1,s3). line(s3,s1). faulty(s2,s3). load(s1,40). load(s2,30). priority(s1). line_capacity(s1,s2,60). overload_check(s1). overload_check(s2). most_priority(s1). request_status(s2,s3,deactivate)."
+    },
+    {
+    "problem_name": 3,
+    "text": "an overload analysis is required for a small grid containing substations s501, s502, s503, and s504. s503 has load 18 while s501 carries 55, s502 carries 25, and s504 carries 40. connections exist from s501 to s503, from s503 to s502. the line between s503 and s502 has capacity 35. s502 and s504 are priority substations. a fault has been detected on the link between s501 and s503. all substations must be evaluated for overload conditions.",
+    "output": "substation(s504). substation(s503). substation(s502). substation(s501). line(s501,s503). line(s503,s501). line(s503,s502). line(s502,s503). line(s501,s502). line(s502,s501). faulty(s501,s503). load(s503,18). load(s501,55). load(s502,25). load(s504,40). priority(s502). priority(s504). line_capacity(s503,s502,35). overload_check(s501). overload_check(s502). overload_check(s503). overload_check(s504). most_priority(s504)."
+    },
+    {
+    "problem_name": 2,
+    "text": "substations s1, s2, and s3 are connected in a chain. the line between s2 and s3 is faulty and must be repaired. substation s3 is marked as critical. the repair cost from s2 to s3 is 25.",
+    "output": "substation(s1). substation(s2). substation(s3). line(s1,s2). line(s2,s1). line(s2,s3). line(s3,s2). line(s1,s3). line(s3,s1). faulty(s2,s3). critical(s3). repair_request(s2,s3). repair_cost(s2,s3,25). total_repair_cost(25)."
+    },
+    {
+    "problem_name": 3,
+    "text": "substations s301, s302, and s303 are in a small interconnected station. s301 is connected to s302. s301 has load 20, s302 has load 30, and s303 has load 10. s302 is marked as priority. the line between s302 and s303 has capacity 50. check overload for s301, s302, and s303.",
+    "output": "substation(s302). substation(s303). substation(s301). line(s301,s302). line(s302,s301). line(s301,s303). line(s303,s301). line(s303,s302). line(s302,s303). load(s301,20). load(s302,30). load(s303,10). priority(s302). line_capacity(s302,s303,50). overload_check(s301). overload_check(s302). overload_check(s303). most_priority(s302)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g_alpha is powered. substation s_beta is connected to substation s_gamma. substation s_beta requests 40 units of energy. generator g_beta is also present but not currently powered. the line between s_beta and s_gamma is not faulty.",
+    "output": "generator(g_alpha). generator(g_beta). substation(s_beta). substation(s_gamma). powered(g_alpha). line(s_beta,s_gamma). line(s_gamma,s_beta). energy_requested(s_beta,40). energy_requested(s_gamma,40)."
+    },
+    {
+    "problem_name": 1,
+    "text": "substation s601 is connected to substation s602. s604 needs 5 units of energy. generator g601 is available and already powered.",
+    "output": "substation(s602). substation(s601). substation(s604). generator(g601). powered(g601). line(s601,s602). line(s602,s601). energy_requested(s604,5)."
+    },
+    {
+    "problem_name": 3,
+    "text": "substations s1, s2, and s3 are part of a system where s1 is connected to s2 and s2 is connected to s3. s1 has load 50, s2 has load 20, and s3 has load 10. s1 and s2 are marked as priority. the line between s2 and s3 is faulty. a line capacity of 70 exists between s1 and s2. generator g1 is present. substations s1 and s2 need to be checked for overload.",
+    "output": "substation(s1). substation(s2). substation(s3). generator(g1). line(s1,s2). line(s2,s3). line(s2,s1). line(s3,s2). line(s1,s3). line(s3,s1). faulty(s2,s3). load(s1,50). load(s2,20). load(s3,10). priority(s1). priority(s2). line_capacity(s1,s2,70). overload_check(s1). overload_check(s2). most_priority(s1)."
+    },
+    {
+    "problem_name": 3,
+    "text": "substations s1, s2, s3, s4, and s5 form a very connected grid. s1 is connected to s2 and s3. s2 is connected to s4. s3 is connected to s4 and s5. s4 is connected to s5. s1 has load 60, s2 has load 20, s3 has load 30, s4 has load 10, and s5 has load 25. s1 and s3 are marked as priority nodes. the line between s3 and s5 is faulty. line capacities are 80 for s1-s2, 50 for s1-s3, 40 for s2-s4, 60 for s3-s4, and 70 for s4-s5. generator g1 and generator g2 are present. check overloads for all substations. deactivate the line from s1 to s3.",
+    "output": "substation(s1). substation(s2). substation(s3). substation(s4). substation(s5). generator(g1). generator(g2). line(s1,s2). line(s2,s1). line(s1,s3). line(s3,s1). line(s2,s4). line(s4,s2). line(s3,s4). line(s4,s3). line(s3,s5). line(s5,s3). line(s4,s5). line(s5,s4). line(s1,s4). line(s4,s1). line(s1,s5). line(s5,s1). line(s2,s3). line(s3,s2). line(s2,s5). line(s5,s2). faulty(s3,s5). load(s1,60). load(s2,20). load(s3,30). load(s4,10). load(s5,25). priority(s1). priority(s3). line_capacity(s1,s2,80). line_capacity(s1,s3,50). line_capacity(s2,s4,40). line_capacity(s3,s4,60). line_capacity(s4,s5,70). overload_check(s1). overload_check(s2). overload_check(s3). overload_check(s4). overload_check(s5).  most_priority(s1). request_status(s1,s3,deactivate)."
+    },
+    {
+    "problem_name": 1,
+    "text": "in this case, there is just one generator g901 which is powered. a single connection exists between s901 and s902, but it is faulty. only s902 asks for 8 units of energy. boost g901.",
+    "output": "substation(s902). generator(g901). substation(s901). powered(g901). line(s901,s902). line(s902,s901). energy_requested(s902,8). energy_requested(s901,8). faulty(s901,s902). boost_request(g901)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g2101 is present and powered. generator g2102 is present but not powered. generator g2103 is present and powered. generator g2104 is present but not powered. generator g2105 is present and powered.",
+    "output": "generator(g2105). generator(g2104). generator(g2103). generator(g2102). generator(g2101). powered(g2101). powered(g2103). powered(g2105)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g1 is present and powered. substation s1 is connected to substation s2. substation s2 requests 10 units of energy. generator g2 is present but not powered.",
+    "output": "generator(g2). substation(s2). generator(g1). substation(s1). powered(g1). line(s2,s1). line(s1,s2). energy_requested(s2,10). energy_requested(s1,10)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g_north is present and powered. generator g_south is present but not powered. generator g_east is present and powered. substation s_a is connected to substation s_b and substation s_c. substation s_b is connected to substation s_c and substation s_d. substation s_b has no requests for energy, but maybe in the future. the line between s_c and s_d is faulty.",
+    "output": "generator(g_north). generator(g_south). generator(g_east). substation(s_a). substation(s_b). substation(s_c). substation(s_d). powered(g_north). powered(g_east). line(s_a,s_b). line(s_b,s_a). line(s_a,s_c). line(s_c,s_a). line(s_b,s_c). line(s_c,s_b). line(s_b,s_d). line(s_d,s_b). line(s_c,s_d). line(s_d,s_c). line(s_a,s_d). line(s_d,s_a). line(s_b,s_d). line(s_d,s_b). faulty(s_c,s_d)."
+    },
+    {
+    "problem_name": 1,
+    "text": "There is a connection between substation s11 and substation s13, but substation s12 is completely isolated. generator g11 is present and powered. generator g12 is present but not powered. substation s13 requests 25 units of energy. substation s14 requests 35 units of energy. substation s11 requests 10 units of energy. the maximum supply capacity of the grid is 90 units. the line between s12 and s14 is faulty.",
+    "output": "substation(s11). substation(s12). substation(s13). substation(s14). generator(g11). generator(g12). powered(g11). line(s11,s13). line(s13,s11). faulty(s12,s14). energy_requested(s11,10). energy_requested(s13,25). energy_requested(s13,10). energy_requested(s11,25). energy_requested(s14,35). max_supplies(90)."
+    },
+    {
+    "problem_name": 3,
+    "text": "substations s10, s11, s12, and s13 form a system where s10 is connected to s11. s11 is connected to s12. s10 has load 45, s11 has load 35, s12 has load 20, and s13 has load 10. s10 and s11 are priority substations. the line between s11 and s12 is faulty. the capacity of the line between s10 and s11 is 70. the capacity of the line between s11 and s12 is 50. line s10 to s11 is faulty. the capacity of the line between s12 and s10 is 40. generator g_main is present. check overload for s10, s11, s12, and s13. we have a request to deactivate line s11 to s12, and line s10 to s11.",
+    "output": "substation(s10). substation(s11). substation(s12). substation(s13). generator(g_main). line(s10,s11). line(s11,s10). line(s11,s12). line(s12,s11). line(s10,s12). line(s12,s10). faulty(s11,s12). load(s10,45). load(s11,35). load(s12,20). load(s13,10). priority(s10). priority(s11). line_capacity(s10,s11,70). line_capacity(s11,s12,50). line_capacity(s12,s10,40). overload_check(s10). overload_check(s11). overload_check(s12). overload_check(s13). most_priority(s10). request_status(s11,s12,deactivate). request_status(s10,s11,deactivate). faulty(s10,s11)."
+    },
+    {
+    "problem_name": 2,
+    "text": "substations s201 and s202 are connected. substation s202 is connected to substation s203. substation s203 is marked as critical. the line between s202 and s203 is faulty and must be repaired. the repair cost from s202 to s203 is 5.",
+    "output": "substation(s201). substation(s202). substation(s203). line(s201,s202). line(s202,s201). line(s202,s203). line(s203,s202). line(s201,s203). line(s203,s201). faulty(s202,s203). critical(s203). repair_request(s202,s203). repair_cost(s202,s203,5). total_repair_cost(5)."
+    },
+    {
+    "problem_name": 1,
+    "text": "we have a small generator g1001 which is powered. substation s1001 is connected to substation s1002. s1001 requests 12 units of energy. the system has a maximum supply limit of 20 units. line s1001 to s1002 is faulty. there is a request to boost g1001.",
+    "output": "generator(g1001). substation(s1002). substation(s1001). powered(g1001). line(s1001,s1002). line(s1002,s1001). energy_requested(s1001,12). energy_requested(s1002,12). max_supplies(20). faulty(s1001,s1002). boost_request(g1001)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g_red is present and powered. generator g_blue is present but not powered. generator g_green is present and powered. substation s_alpha is linked to substation s_beta. substation s_gamma is connected to substation s_delta. Boost g_green,, g_red, and g_blue. substation s_beta requests 30 units of energy. substation s_delta requests 20 units of energy. the line between s_gamma and s_delta is faulty.",
+    "output": "generator(g_red). generator(g_blue). generator(g_green). substation(s_alpha). substation(s_beta). substation(s_gamma). substation(s_delta). powered(g_red). powered(g_green). line(s_alpha,s_beta). line(s_beta,s_alpha). line(s_gamma,s_delta). line(s_delta,s_gamma). faulty(s_gamma,s_delta). energy_requested(s_beta,30). energy_requested(s_delta,20). energy_requested(s_alpha,30). energy_requested(s_gamma,20). boost_request(g_green). boost_request(g_red). boost_request(g_blue)."
+    },
+    {
+    "problem_name": 2,
+    "text": "we have two substations, s701 and s702. they are connected, but the line from 701 to 702 is faulty and needs repair. s702 is critical, and the repair cost for the line is 6.",
+    "output": "substation(s702). substation(s701). line(s701,s702). line(s702,s701). faulty(s701,s702). critical(s702). repair_request(s701,s702). repair_cost(s701,s702,6). total_repair_cost(6)."
+    },
+    {
+    "problem_name": 2,
+    "text": "substations s31, s32, s33, and s34 are arranged such that s31 is connected to s32, and s33 is connected to s34. the line between s33 and s34 is faulty and must be repaired. substation s34 is critical. the repair cost from s33 to s34 is 15.",
+    "output": "substation(s31). substation(s32). substation(s33). substation(s34). line(s31,s32). line(s32,s31). line(s33,s34). line(s34,s33). faulty(s33,s34). critical(s34). repair_request(s33,s34). repair_cost(s33,s34,15). total_repair_cost(15)."
+    },
+    {
+    "problem_name": 3,
+    "text": "substations s41, s42, and s43 form a very important part of a grid, where s41 is connected to s42 and s42 is connected to s43. s41 has load 25, s42 has load 55, and s43 has load 35. s42 and s43 are marked as priority substations. the line between s41 and s42 has capacity 60. the line between s42 and s43 has capacity 50. the line between s41 and s43 is faulty. check overload for s41, s42, and s43.",
+    "output": "substation(s41). substation(s42). substation(s43). line(s41,s42). line(s42,s41). line(s42,s43). line(s43,s42). line(s41,s43). line(s43,s41). faulty(s41,s43). load(s41,25). load(s42,55). load(s43,35). priority(s42). priority(s43). line_capacity(s41,s42,60). line_capacity(s42,s43,50). overload_check(s41). overload_check(s42). overload_check(s43). most_priority(s42)."
+    },
+    {
+    "problem_name": 2,
+    "text": "a quick check: s1101 connects to s1102. that link is faulty and needs to be repaired. s1102 is marked critical, and the repair cost for that connection is 9.",
+    "output": "substation(s1102). substation(s1101). line(s1101,s1102). line(s1102,s1101). faulty(s1101,s1102). critical(s1102). repair_request(s1101,s1102). repair_cost(s1101,s1102,9). total_repair_cost(9)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g_orange is present and powered. generator g_black is present and powered. generator g_white is present but not powered. substation s_u is connected to substation s_v. substation s_v is connected to substation s_w. substation s_w requests 60 units of energy. substation s_v requests 20 units of energy. the line between s_v and s_w is faulty. There is also a request to boost g_orange and g_black",
+    "output": "generator(g_orange). generator(g_black). generator(g_white). substation(s_u). substation(s_v). substation(s_w). powered(g_orange). powered(g_black). line(s_u,s_v). line(s_v,s_u). line(s_v,s_w). line(s_w,s_v). line(s_u,s_w). line(s_w,s_u). faulty(s_v,s_w). energy_requested(s_w,60). energy_requested(s_v,20). energy_requested(s_w,20). energy_requested(s_u,20). energy_requested(s_v,60). energy_requested(s_u,60). boost_request(g_orange). boost_request(g_black)"
+    },
+    {
+    "problem_name": 3,
+    "text": "substations s51, s52, s53, and s54 form a grid where s51 is connected to s52, and s53 is connected to s54. s51 has load 15, s52 has load 45, s53 has load 35, and s54 has load 25. s52 and s54 are priority substations. the line between s52 and s53 is faulty. the capacity of the line between s51 and s52 is 60. the capacity of the line between s52 and s53 is 40. the capacity of the line between s53 and s54 is 50. check overload for s51, s52, s53, and s54.",
+    "output": "substation(s51). substation(s52). substation(s53). substation(s54). line(s51,s52). line(s52,s51). line(s53,s54). line(s54,s53). faulty(s52,s53). load(s51,15). load(s52,45). load(s53,35). load(s54,25). priority(s52). priority(s54). line_capacity(s51,s52,60). line_capacity(s52,s53,40). line_capacity(s53,s54,50). overload_check(s51). overload_check(s52). overload_check(s53). overload_check(s54). most_priority(s52)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g21 is present and powered. substation s21 is connected to substation s22. substation s22 requests 15 units of energy. generator g22 is present but not powered. the maximum supply limit is 50 units.",
+    "output": "generator(g21). generator(g22). substation(s21). substation(s22). powered(g21). line(s21,s22). line(s22,s21). energy_requested(s22,15). energy_requested(s21,15). max_supplies(50). feasible."
+    },
+    {
+    "problem_name": 3,
+    "text": "we have substation s1001 that has a load of 22 and substation s1002 which has load 18. the line between them has capacity 30. s1001 is marked as priority. both substations should be checked for overload.",
+    "output": "substation(s1002). substation(s1001). line(s1001,s1002). line(s1002,s1001). load(s1001,22). load(s1002,18). priority(s1001). line_capacity(s1001,s1002,30). overload_check(s1001). overload_check(s1002). most_priority(s1001)."
+    },
+    {
+    "problem_name": 3,
+    "text": "we have some substations, which are s801, s802, and s804. s801 has load 12 and s802 has load 30. the line s801 to s802 has capacity 40. s802 is marked as priority. check overload for both substations.",
+    "output": "substation(s801). substation(s802). substation(s804). line(s801,s802). line(s802,s801). load(s801,12). load(s802,30). priority(s802). line_capacity(s801,s802,40). overload_check(s801). overload_check(s802). most_priority(s802)."
+    },
+    {
+    "problem_name": 2,
+    "text": "substations s61, s62, s63, and s64 are arranged such that s61 is connected to s62 and s62 is connected to s63. substation s64 is isolated. the line between s62 and s63 is faulty and must be repaired. substation s63 is critical. the repair cost from s62 to s63 is 18.",
+    "output": "substation(s61). substation(s62). substation(s63). substation(s64). line(s61,s62). line(s62,s61). line(s62,s63). line(s63,s62). line(s61,s63). line(s63,s61). faulty(s62,s63). critical(s63). repair_request(s62,s63). repair_cost(s62,s63,18). total_repair_cost(18)."
+    },
+    {
+    "problem_name": 3,
+    "text": "substation s101 is connected to s102. s105 has load 40 while s101 has load 15 and s104 has load 55. s102 is connected to s103 and s104. substation s103 is connected to s105. s104 and s105 are marked as priority substations. substation s106 is connected to s101 and s104. line capacities are given as 60 for s101 to s102, 45 for s102 to s103, 70 for s103 to s105, and 50 for s104 to s105. substation s101, s102, s103, s104, s105, and s106 must all be checked for overload. the line between substation 102 and 103 is faulty.",
+    "output": "substation(s101). substation(s102). substation(s103). substation(s104). substation(s105). substation(s106). line(s101,s102). line(s102,s101). line(s102,s103). line(s103,s102). line(s103,s105). line(s105,s103). line(s102,s104). line(s104,s102). line(s105,s106). line(s106,s105). line(s103,s104). line(s104,s101). line(s101,s103). line(s104,s103). line(s103,s101). line(s105,s101). line(s101,s104). line(s102,s106). line(s101,s105). line(s106,s102). line(s105,s102). line(s106,s103). line(s102,s105). line(s103,s106). line(s104,s105). line(s105,s104). line(s101,s106). line(s106,s101). line(s104,s106). line(s106,s104). faulty(s102,s103). load(s105,40). load(s101,15). load(s104,55). priority(s104). priority(s105). line_capacity(s101,s102,60). line_capacity(s102,s103,45). line_capacity(s103,s105,70). line_capacity(s104,s105,50). overload_check(s101). overload_check(s102). overload_check(s103). overload_check(s104). overload_check(s105). overload_check(s106). most_priority(s104)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g7 is present and powered. generator g8 is present but not powered. substation s7 is connected to substation s8 and substation s9. substation s8 is connected to substation s9. substation s9 requests 40 units of energy. substation s7 requests 20 units of energy. the maximum energy supply allowed in the system is 100 units. the line between s8 and s9 is faulty. There is a request to also boost g7 and g8.",
+    "output": "substation(s9). substation(s7). generator(g8). substation(s8). generator(g7). powered(g7). line(s7,s8). line(s8,s7). line(s7,s9). line(s9,s7). line(s8,s9). line(s9,s8). faulty(s8,s9). energy_requested(s8,40). energy_requested(s9,20). energy_requested(s7,40). energy_requested(s8,20). energy_requested(s9,40). energy_requested(s7,20). max_supplies(100). boost_request(g7). boost_request(g8)."
+    },
+    {
+    "problem_name": 2,
+    "text": "substations s31 and s32 are connected. substation s32 is connected to substation s33. substation s33 is critical. the line between s32 and s33 is faulty and must be repaired. the repair cost from s32 to s33 is 8.",
+    "output": "substation(s33). substation(s31). substation(s32). line(s31,s32). line(s32,s31). line(s32,s33). line(s33,s32). line(s31,s33). line(s33,s31). faulty(s32,s33). critical(s33). repair_request(s32,s33). repair_cost(s32,s33,8). total_repair_cost(8)."
+    },
+    {
+    "problem_name": 1,
+    "text": "only one generator g1201 is active here. s1201 is linked to s1202, and s1202 asks for 6 units of energy. the line from s1201 to s1202 is faulty. the system limit is 15 units. there is a request to boost g1201.",
+    "output": "substation(s1202). generator(g1201). substation(s1201). powered(g1201). line(s1201,s1202). line(s1202,s1201). energy_requested(s1202,6). energy_requested(s1201,6). faulty(s1201,s1202). max_supplies(15). feasible. boost_request(g1201)."
+    },
+    {
+    "problem_name": 1,
+    "text": "generator g2001 is present and powered. generator g2002 is present but not powered. generator g2003 is present and powered. generator g2004 is present. we also have generators g1, g2, g3, g4, g5, g6, and g9.",
+    "output": "generator(g2002). generator(g2001). generator(g2003). generator(g2004). generator(g1). generator(g2). generator(g3). generator(g4). generator(g5). generator(g6). generator(g9). powered(g2001). powered(g2003)."
+    },
+    {
+    "problem_name": 2,
+    "text": "only one repair is needed here: substation s951 is linked to s952, and that connection is faulty. s952 is critical. the repair cost for fixing the link from s951 to s952 is 4.",
+    "output": "substation(s952). substation(s951). line(s951,s952). line(s952,s951). faulty(s951,s952). critical(s952). repair_request(s951,s952). repair_cost(s951,s952,4). total_repair_cost(4)."
+    }
+]

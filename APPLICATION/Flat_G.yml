@@ -1,0 +1,52 @@
+preprocessing:
+- _: |
+
+
+strings:
+- layered_graph_description: |
+    The text describe a (possibly layered) undirected graph
+    Nodes are assigned to layers.
+    Each layer has a layer_size.
+    Edges connect pairs of nodes.
+
+extract:
+
+- layer_size(layer, number_of_nodes):
+    types: [int, int]
+    prompt: |
+        {layered_graph_description}
+
+        For each layer, specify the number of nodes.
+
+- in_layer(layer, node):
+    types: [int, symbol]
+
+    prompt: | 
+        {layered_graph_description}
+        
+        For each layer, list every node that belongs to that layer.
+
+    kb: |
+        warning(unmatched_layer_size, (Layer,Size,Cnt)) :-  layer_size(Layer,Size), Cnt = #count{Node : in_layer(Layer,Node)}, Size != Cnt.  
+        warning(unmatched_layer_size, (Layer,unknown,Cnt)) :-  in_layer(Layer, _), not layer_size(Layer,_), Cnt = #count{Node : in_layer(Layer,Node)}, Cnt > 0.
+
+        #show warning/2.
+        #show in_layer/2.
+
+    if: layer_size(_, _)
+
+
+- edge(source, target):
+    types: [symbol, symbol]
+
+    prompt: | 
+        {layered_graph_description}
+        
+        List all the edges from source to target.
+
+    kb: |
+        edge(X,Y) :- edge(Y,X).     
+
+        #show edge/2.
+
+    if: not warning(unmatched_layer_size, _)

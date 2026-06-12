@@ -1,0 +1,133 @@
+preprocessing:
+- _: |
+    Problem description:
+    An electrical grid consists of substations, power lines connecting those substations, and generators that supply power.  
+    Depending on the user's request, different problems can be solved:
+    1. Power availability: determine which substations are powered and need energy supplies.
+    2. Repair/restoration: find repairs to restore power to critical substations.
+    3. Load/capacity analysis: check if line capacities and overloads are satisfied.
+    The user gives information about the grid, and about possible situations and requests.
+
+extract:
+- problem_name(problem):
+    types: [int]
+    prompt: |
+        Identify the problem. 
+        If the user request mentions powered substations, requests for powering or energy supplies, then problem_name(1).
+        If the request mentions repairing lines, restoring service, or critical substations, then problem_name(2).
+        If the request mentions loads, line capacities, power flow, or checking for overloads, then problem_name(3).
+
+
+
+- substation(id):
+    types: [symbol]
+    prompt: Extract all substations mentioned by the user (an unquoted string).
+    if: problem_name(_)
+
+- generator(id):
+    types: [symbol]
+    prompt: Extract all generators mentioned by the user (an unquoted string).
+    if: problem_name(_)
+
+
+- line(source, target):
+    types: [symbol, symbol]
+    prompt: Extract all connection lines mentioned by the user (an unquoted string to an unquoted string).
+    kb: |
+        line(Y,X) :- line(X,Y), X != Y.
+        line(X,Y) :- line(X,Z), line(Z,Y), X != Y.
+    if: problem_name(_), substation(_)
+
+- faulty(source, target):
+    types: [symbol, symbol]
+    prompt: Extract all faulty connection lines mentioned by the user (an unquoted string to an unquoted string).
+    if: problem_name(_), substation(_)
+
+
+
+- powered(id):
+    types: [symbol]
+    prompt: Extract which generators are powered (an unquoted string).
+    if: problem_name(1), generator(_)
+
+- boost_request(id):
+    types: [symbol]
+    prompt: Extract which generators have been requested to be boosted (an unquoted string).
+    if: problem_name(1), generator(_)
+
+
+
+- energy_requested(id, quantity):
+    types: [symbol, int]
+    prompt: Extract which substations request energy (an unquoted string) and the specific amount requested (an integer).
+    kb: | 
+        energy_requested(S2, Q) :- energy_requested(S1, Q), line(S1, S2), not faulty(S1, S2).
+        energy_requested(S2, Q) :- energy_requested(S1, Q), line(S2, S1), not faulty(S2, S1).
+        #show energy_requested/2.
+    if: problem_name(1), generator(_), powered(_), substation(_)
+
+- max_supplies(quantity):
+    types: [int]
+    prompt: Extract the maximum amount of energy supplies the grid can transfer (an integer).
+    kb: | 
+        total_requested(T) :- T = #sum { Q,S : energy_requested(S,Q) }.
+        feasible :- max_supplies(M), total_requested(T), T <= M.
+        #show feasible/0.
+        #show max_supplies/1.
+    if: problem_name(1), generator(_), powered(_), substation(_)
+
+
+
+- critical(id):
+    types: [symbol]
+    prompt: Extract substations marked by the user as critical (an unquoted string).
+    if: problem_name(2), substation(_), line(_,_)
+
+- repair_request(source, target):
+    types: [symbol, symbol]
+    prompt: Extract lines the user wants repaired (an unquoted string to an an unquoted string).
+    if: problem_name(2), substation(_), line(_,_)
+
+- repair_cost(source, target, cost):
+    types: [symbol, symbol, int]
+    prompt: Extract repair costs for substation lines (an unquoted string for source and target, an integer for cost).
+    kb: |
+        total_repair_cost(T) :- T = #sum { C,S,T2 : repair_cost(S, T2, C) }.
+    if: problem_name(2), substation(_), line(_,_)
+
+
+
+- most_priority(id):
+    types: [symbol]
+    kb: |
+        p_load(X,Y) :- priority(X), load(X,Y).
+        worse(X) :- p_load(X,Y), p_load(X2,Y2), Y2 > Y.
+        most_priority(X) :- p_load(X,_), not worse(X).
+        #show most_priority/1.
+    retry: True
+    if: problem_name(3), substation(_), load(X, Y), priority(X)
+
+- line_capacity(source, target, capacity):
+    types: [symbol, symbol, int]
+    prompt: Extract line capacities mentioned by the user (an unquoted string for source and target, an integer for capacity).
+    if: problem_name(3), line(_,_), substation(_)
+
+- load(id, amount):
+    types: [symbol, int]
+    prompt: Extract for each substation (an unquoted string) their load (an integer).
+    if: problem_name(3), line(_,_), substation(_)
+
+- priority(id):
+    types: [symbol]
+    prompt: Extract priority substations that must be powered first (an unquoted string).
+    if: problem_name(3), line(_,_), substation(_)
+
+- request_status(source, target, status):
+    types: [symbol, symbol, symbol]
+    prompt: Extract which lines (source to target, both as unquoted strings) have requests to change their activation status (activate/deactivate) (as an unquoted string).
+    if: problem_name(3), line(_,_), substation(_)
+
+- overload_check(id):
+    types: [symbol]
+    prompt: Extract which substations need to be checked for overload (an unquoted string).
+    if: problem_name(3), line(_,_), substation(_)
